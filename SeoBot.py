@@ -21,11 +21,6 @@ GOOGLEINPUT = "q"
 #ID SELECTORS
 RESULTS = "rso"
 
-# JAVASCRIPT COMMANDS
-SCROLL_UP = "window.scrollTo(0, 0);"
-SCROLL_DOWN = "window.scrollTo(0, 200);"
-
-
 class SeoBOt:
 
     def __init__(self):
@@ -34,6 +29,7 @@ class SeoBOt:
         opts = Options()
         randomuser = "user-agent=" + ua.random
         opts.add_argument(randomuser)
+        opts.add_argument("headless")
         self._driver = webdriver.Chrome('./chromedriver', chrome_options=opts)
         agent = self._driver.execute_script("return navigator.userAgent")
         self.printWithLog('{}\n'.format(agent))
@@ -52,10 +48,10 @@ class SeoBOt:
                 url = div.find_element_by_tag_name('cite')
                 if urlsite in url.text:
                     link = div.find_element_by_tag_name('h3')
-                    self._driver.execute_script(SCROLL_DOWN)
+                    self._driver.execute_script("arguments[0].scrollIntoView();", div)
                     link.click()
+                    self.printWithLog("Link found and clicked")
                     return
-
             except NoSuchElementException:
                 pass
 
